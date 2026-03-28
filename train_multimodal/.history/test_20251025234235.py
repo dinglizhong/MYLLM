@@ -6,10 +6,10 @@ from train import VLMConfig, VLM
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 processor = AutoProcessor.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/siglip-base-patch16-224'
+    '/root/autodl-tmp/llm_related/train_multimodal_from_scratch/siglip-base-patch16-224'
 )
 tokenizer = AutoTokenizer.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/Qwen2.5-0.5B-Instruct'
+    '/root/autodl-tmp/llm_related/train_multimodal_from_scratch/Qwen2.5-0.5B-Instruct'
 )
 
 # 确保tokenizer有pad_token
@@ -22,7 +22,7 @@ AutoModelForCausalLM.register(VLMConfig, VLM)
 
 # 加载模型
 model = AutoModelForCausalLM.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/save/sft'
+    '/root/autodl-tmp/llm_related/train_multimodal_from_scratch/save/sft'
 )
 model.to(device)
 model.eval()
@@ -46,7 +46,7 @@ labels = torch.full_like(input_ids, fill_value=tokenizer.pad_token_id, dtype=tor
 
 # 处理图像
 image = Image.open(
-    '/root/autodl-tmp/train_multimodal/test_images/test1.jpg'
+    '/root/autodl-tmp/llm_related/train_multimodal_from_scratch/test_images/test1.jpg'
 ).convert("RGB")
 pixel_values = processor(text=None, images=image, return_tensors="pt")['pixel_values'].to(device)
 

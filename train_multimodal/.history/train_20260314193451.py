@@ -21,11 +21,11 @@ device = torch.device("cuda")  # 显式定义设备为GPU
 print(device)
 
 # 定义所有本地模型路径（请根据实际下载路径修改）
-LOCAL_LLM_PATH = '/root/autodl-tmp/train_multimodal/Qwen2.5-0.5B-Instruct'
+LOCAL_LLM_PATH = '/root/autodl-tmp/llm_related/train_multimodal/Qwen2.5-0.5B-Instruct'
 # 第一个SigLIP模型：so400m版本
-LOCAL_VISION_MODEL_SO400M = '/root/autodl-tmp/train_multimodal/siglip-so400m-patch14-384'
+LOCAL_VISION_MODEL_SO400M = '/root/autodl-tmp/llm_related/train_multimodal/siglip-so400m-patch14-384'
 # 第二个SigLIP模型：base版本（新增变量）
-LOCAL_VISION_MODEL_BASE = '/root/autodl-tmp/train_multimodal/siglip-base-patch16-224'
+LOCAL_VISION_MODEL_BASE = '/root/autodl-tmp/llm_related/train_multimodal/siglip-base-patch16-224'
 
 class VLMConfig(PretrainedConfig):
     model_type = "vlm_model"

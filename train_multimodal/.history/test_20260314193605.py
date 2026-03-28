@@ -6,13 +6,13 @@ from train import VLMConfig, VLM
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 processor = AutoProcessor.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/siglip-base-patch16-224'
+    '/root/autodl-tmp/llm_related/train_multimodal/siglip-base-patch16-224'
 )
 tokenizer = AutoTokenizer.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/Qwen2.5-0.5B-Instruct'
+    '/root/autodl-tmp/llm_related/train_multimodal/Qwen2.5-0.5B-Instruct'
 )
 
-# 确保tokenizer有pad_token
+# �?保tokenizer有pad_token
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
 
@@ -22,7 +22,7 @@ AutoModelForCausalLM.register(VLMConfig, VLM)
 
 # 加载模型
 model = AutoModelForCausalLM.from_pretrained(
-    '/root/autodl-tmp/train_multimodal/save/sft'
+    '/root/autodl-tmp/llm_related/train_multimodal/save/sft'
 )
 model.to(device)
 model.eval()
@@ -31,7 +31,7 @@ model.eval()
 q_text = tokenizer.apply_chat_template(
     [
         {"role": "system", "content": 'You are a helpful assistant.'},
-        {"role": "user", "content": '图片中有鸭子吗\n<image>'}
+        {"role": "user", "content": '图片�?有鸭子吗\n<image>'}
     ],
     tokenize=False,
     add_generation_prompt=True
@@ -40,13 +40,13 @@ q_text = tokenizer.apply_chat_template(
 # 处理输入IDs
 input_ids = tokenizer(q_text, return_tensors='pt')['input_ids'].to(device)
 
-# 关键修改：构造一个与input_ids形状一致的labels张量（用pad_token_id填充）
+# 关键�?改：构造一�?与input_ids形状一致的labels张量（用pad_token_id�?充）
 # 避免train.py中labels.to(device)报错
 labels = torch.full_like(input_ids, fill_value=tokenizer.pad_token_id, dtype=torch.long).to(device)
 
 # 处理图像
 image = Image.open(
-    '/root/autodl-tmp/train_multimodal/test_images/test1.jpg'
+    '/root/autodl-tmp/llm_related/train_multimodal_from_scratch/test_images/test1.jpg'
 ).convert("RGB")
 pixel_values = processor(text=None, images=image, return_tensors="pt")['pixel_values'].to(device)
 
@@ -57,13 +57,13 @@ eos = tokenizer.eos_token_id
 top_k = None
 s = input_ids.shape[1]
 
-with torch.no_grad():  # 禁用梯度计算
+with torch.no_grad():  # 禁用�?度�?�算
     while input_ids.shape[1] < s + max_new_tokens - 1:
         # 传入构造的labels（而非None），避免AttributeError
         inference_res = model(input_ids=input_ids, labels=labels, pixel_values=pixel_values)
         logits = inference_res.logits[:, -1, :]
 
-        # 温度调整和采样
+        # 温度调整和采�?
         if temperature == 0.0:
             _, idx_next = torch.topk(logits, k=1, dim=-1)
         else:
@@ -79,12 +79,12 @@ with torch.no_grad():  # 禁用梯度计算
 
         # 更新input_ids和labels（保持形状一致）
         input_ids = torch.cat((input_ids, idx_next), dim=1)
-        # 新添加的token位置的labels仍用pad_token_id填充（不影响推理）
+        # 新添加的token位置的labels仍用pad_token_id�?充（不影响推理）
         labels = torch.cat(
             (labels, torch.tensor([[tokenizer.pad_token_id]], device=device, dtype=torch.long)),
             dim=1
         )
 
-# 解码并输出结果
+# 解码并输出结�?
 generated_text = tokenizer.decode(input_ids[:, s:][0], skip_special_tokens=True)
 print(generated_text)

@@ -138,7 +138,7 @@ if __name__ == '__main__':
     AutoConfig.register("vlm_model", VLMConfig)
     AutoModelForCausalLM.register(VLMConfig, VLM)
     # 在sft_train.py中加载模型时，添加ignore_mismatched_sizes参数
-    model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/train_multimodal/save/pretrain/', ignore_mismatched_sizes=True, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/llm_related/train_multimodal/save/pretrain/', ignore_mismatched_sizes=True, device_map="auto")
     
     # 修正参数冻结逻辑
     for name, param in model.named_parameters():
