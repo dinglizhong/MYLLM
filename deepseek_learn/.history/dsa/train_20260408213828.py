@@ -26,10 +26,10 @@ class DSATrainer(Trainer):
 
             raw_attn_weights_topk = F.softmax(raw_attn_weights_topk, dim=-1)
   
-            # head 维度求和
+            # head维度求和
             raw_attn_weights_topk = raw_attn_weights_topk.sum(1, keepdim=True)
  
-            # L1 归一化
+            # L1归一化
             raw_attn_weights_topk = raw_attn_weights_topk / torch.norm(raw_attn_weights_topk, dim=-1, p=1, keepdim=True)
 
             indexer_attn_scores_topk = torch.gather(indexer_attn_scores, -1, topk_indices)

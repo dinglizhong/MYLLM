@@ -26,10 +26,10 @@ class DSATrainer(Trainer):
 
             raw_attn_weights_topk = F.softmax(raw_attn_weights_topk, dim=-1)
   
-            # head 维度求和
+            # head维度求和
             raw_attn_weights_topk = raw_attn_weights_topk.sum(1, keepdim=True)
  
-            # L1 归一化
+            # L1归一�?
             raw_attn_weights_topk = raw_attn_weights_topk / torch.norm(raw_attn_weights_topk, dim=-1, p=1, keepdim=True)
 
             indexer_attn_scores_topk = torch.gather(indexer_attn_scores, -1, topk_indices)
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     total_params = sum(p.numel() for p in model.parameters())
 
-    print(f"训练参数数量: {trainable_params:,}")
-    print(f"总参数数量: {total_params:,}")
+    print(f"�?�?练参数数�?: {trainable_params:,}")
+    print(f"总参数数�?: {total_params:,}")
     
     
     tokenizer = AutoTokenizer.from_pretrained("/root/autodl-tmp/Qwen2.5-0.5B-Instruct")
@@ -81,7 +81,7 @@ if __name__ == '__main__':
                             dataloader_num_workers=8,
                             dataloader_pin_memory=True)
     data_collator = DefaultDataCollator()
-    dataset = SFTDataset('./sft_data_1024.jsonl', tokenizer=tokenizer, max_seq_len=2048)
+    dataset = SFTDataset('warmup_data.jsonl', tokenizer=tokenizer, max_seq_len=2048)
     trainer = DSATrainer(model=model,
                         args=args, 
                         train_dataset=dataset, 
@@ -90,4 +90,5 @@ if __name__ == '__main__':
     trainer.train(resume_from_checkpoint=True)
     trainer.save_model('./step2_model')
     trainer.save_state()
+    
     

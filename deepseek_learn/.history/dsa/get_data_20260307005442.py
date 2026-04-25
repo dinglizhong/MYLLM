@@ -1,7 +1,7 @@
 import json
 import tqdm
 from transformers import Trainer, TrainingArguments, AutoTokenizer, DefaultDataCollator
-tokenizer = AutoTokenizer.from_pretrained("/root/autodl-tmp/Qwen2.5-0.5B-Instruct")
+tokenizer = AutoTokenizer.from_pretrained("Qwen2.5-0.5B-Instruct")
 
 with open('sft_data_zh.jsonl', 'r', encoding='utf-8') as f:
     with open('warmup_data.jsonl', 'a', encoding='utf-8') as fw:

@@ -65,3 +65,6 @@ class SFTDataset(Dataset):
         # labels = labels[1:]
         return {'input_ids': torch.tensor(input_ids), 'labels': torch.tensor(labels), 'attention_mask': torch.tensor(attention_mask)}
     
+        
+            
+            

@@ -404,6 +404,7 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel, GenerationMixin):
 
 
 
+
 if __name__ == '__main__':
     import os
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -431,4 +432,9 @@ if __name__ == '__main__':
     output = model.generate(inputs, do_sample=False)
 
     print(tokenizer.decode(output[0]))
+    
+
+    
+
+    
     

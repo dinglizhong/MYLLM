@@ -404,12 +404,13 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel, GenerationMixin):
 
 
 
+
 if __name__ == '__main__':
     import os
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     
-    tokenizer = AutoTokenizer.from_pretrained('/root/autodl-tmp/Qwen2.5-0.5B-Instruct/')
-    model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/Qwen2.5-0.5B-Instruct/')
+    tokenizer = AutoTokenizer.from_pretrained('/home/user/Downloads/Qwen2.5-0.5B-Instruct/')
+    model = AutoModelForCausalLM.from_pretrained('/home/user/Downloads/Qwen2.5-0.5B-Instruct/')
  
     messages = [{"role": "user", "content": "你好"}]
     text = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize = False)
@@ -427,8 +428,13 @@ if __name__ == '__main__':
     #     new_self_attn.load_state_dict(old_self_attn.state_dict(), strict=False)
     #     layer.self_attn = new_self_attn
     
-    model = Qwen2ForCausalLM.from_pretrained('/root/autodl-tmp/Qwen2.5-0.5B-Instruct/')
+    model = Qwen2ForCausalLM.from_pretrained('/home/user/Downloads/Qwen2.5-0.5B-Instruct/')
     output = model.generate(inputs, do_sample=False)
 
     print(tokenizer.decode(output[0]))
+    
+
+    
+
+    
     
