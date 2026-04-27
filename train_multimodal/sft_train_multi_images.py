@@ -125,11 +125,11 @@ class MyDataCollator:
 
 if __name__ == '__main__':
     config = VLMConfig()
-    processor = AutoProcessor.from_pretrained('/root/autodl-tmp/train_multimodal/siglip-base-patch16-224')
-    tokenizer = AutoTokenizer.from_pretrained('/root/autodl-tmp/train_multimodal/Qwen2.5-0.5B-Instruct')
+    processor = AutoProcessor.from_pretrained('/root/autodl-tmp/siglip-base-patch16-224')
+    tokenizer = AutoTokenizer.from_pretrained('/root/autodl-tmp/Qwen2.5-0.5B-Instruct')
     AutoConfig.register("vlm_model", VLMConfig)
     AutoModelForCausalLM.register(VLMConfig, VLM)
-    model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/train_multimodal/save/sft')
+    model = AutoModelForCausalLM.from_pretrained('./save/sft')
     
     for name, param in model.named_parameters():
         if 'linear' in name or 'vision_model':
@@ -138,9 +138,9 @@ if __name__ == '__main__':
             param.requires_grad = True
     print(f'模型参数量为：{sum(p.numel() for p in model.parameters())}') 
     print(f'模型可训练参数量为：{sum(p.numel() for p in model.parameters() if p.requires_grad)}') 
-    images_path = '/root/autodl-tmp/train_multimodal/dataset'
-    data_path = '/root/autodl-tmp/train_multimodal/dataset/train-00000-of-00001.parquet'
-    output_dir = 'save/sft_multi_image_v2' 
+    images_path = './sft_images/'
+    data_path = './dataset/train-00000-of-00001.parquet'
+    output_dir = './save/sft_multi_image_v2' 
     args = TrainingArguments(
         output_dir=output_dir,
         do_train=True,
@@ -164,5 +164,5 @@ if __name__ == '__main__':
     )
     
     trainer.train(resume_from_checkpoint=False)
-    trainer.save_model('save/sft_multi_image_v2')
+    trainer.save_model('./save/sft_multi_image_v2')
     trainer.save_state()

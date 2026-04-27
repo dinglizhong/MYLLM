@@ -53,6 +53,7 @@ class SFTDataset(Dataset):
     def __getitem__(self, index):
         sample = self.datas[index]
         try:
+            # 图片训练集为 COCO 2014 
             image_name = 'COCO_train2014_' + str(sample['image'])
             conversations = sample['conversations']
             messages = [{"role":"system", "content":'You are a helpful assistant.'}]
@@ -138,7 +139,7 @@ if __name__ == '__main__':
     AutoConfig.register("vlm_model", VLMConfig)
     AutoModelForCausalLM.register(VLMConfig, VLM)
     # 在sft_train.py中加载模型时，添加ignore_mismatched_sizes参数
-    model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/train_multimodal/save/pretrain/', ignore_mismatched_sizes=True, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained('./save/pretrain/', ignore_mismatched_sizes=True, device_map="auto")
     
     # 修正参数冻结逻辑
     for name, param in model.named_parameters():

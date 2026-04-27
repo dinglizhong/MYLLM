@@ -3,12 +3,12 @@ from PIL import Image
 from train import VLMConfig, VLM
 
 device = "cuda"
-processor = AutoProcessor.from_pretrained('/root/autodl-tmp/train_multimodal/siglip-base-patch16-224')
-tokenizer = AutoTokenizer.from_pretrained('/root/autodl-tmp/train_multimodal/Qwen2.5-0.5B-Instruct')
+processor = AutoProcessor.from_pretrained('/root/autodl-tmp/siglip-base-patch16-224')
+tokenizer = AutoTokenizer.from_pretrained('/root/autodl-tmp/Qwen2.5-0.5B-Instruct')
 AutoConfig.register("vlm_model", VLMConfig)
 AutoModelForCausalLM.register(VLMConfig, VLM)
 
-model = AutoModelForCausalLM.from_pretrained('/root/autodl-tmp/train_multimodal/save/sft_multi_image_v2')
+model = AutoModelForCausalLM.from_pretrained('./save/sft_multi_image_v2')
 model.to(device)
 # q_text = tokenizer.apply_chat_template([{"role":"system", "content":'You are a helpful assistant.'}, {"role":"user", "content":'第二张图上面有什么\n<image><image>'}], \
 #             tokenize=False, \
@@ -20,8 +20,8 @@ q_text = tokenizer.apply_chat_template([{"role":"system", "content":'You are a h
 
 input_ids = tokenizer(q_text, return_tensors='pt')['input_ids']
 input_ids = input_ids.to(device)
-image1 = Image.open('/root/autodl-tmp/train_multimodal/test_images/th1.png').convert("RGB")
-image2 = Image.open('/root/autodl-tmp/train_multimodal/test_images/th2.png').convert("RGB")
+image1 = Image.open('./test_images/th1.png').convert("RGB")
+image2 = Image.open('./test_images/th2.png').convert("RGB")
 pixel_values = processor(text=None, images=[image1, image2]).pixel_values
 pixel_values = pixel_values.to(device)
 model.eval()

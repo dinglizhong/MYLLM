@@ -91,8 +91,8 @@ class KGTrainer(Trainer):
 
 if __name__ == '__main__':
     
-    model = AutoModelForCausalLM.from_pretrained("/home/user/Downloads/Qwen2.5-0.5B-Instruct", trust_remote_code=True)
-    tokenizer = AutoTokenizer.from_pretrained("/home/user/Downloads/Qwen2.5-0.5B-Instruct", trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained("/root/autodl-tmp/Qwen2.5-0.5B-Instruct", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained("/root/autodl-tmp/Qwen2.5-0.5B-Instruct", trust_remote_code=True)
     
     lora_config = LoraConfig(
     r=8,  
@@ -106,14 +106,14 @@ if __name__ == '__main__':
     print(model.print_trainable_parameters())
     
 
-    teacher_model = AutoModelForCausalLM.from_pretrained("/home/user/Downloads/Qwen2.5-7B-Instruct", trust_remote_code=True)
+    teacher_model = AutoModelForCausalLM.from_pretrained("/root/autodl-tmp/Qwen2.5-7B-Instruct", trust_remote_code=True)
     
     model.cuda()
     teacher_model.cuda()
     teacher_model.eval()
     
     
-    train_dataset = OnPolicyDataset('data.json', tokenizer)
+    train_dataset = OnPolicyDataset('./data.json', tokenizer)
     
     
     
