@@ -1,0 +1,27 @@
+{$SEARXNG_HOSTNAME} {
+    bind {$SEARXNG_BIND_ADDRESS:0.0.0.0}
+
+    tls {$SEARXNG_TLS}
+
+    @api {
+        path /config
+        path /healthz
+    }
+
+    handle @api {
+        reverse_proxy localhost:8080
+    }
+
+    @search {
+        path /
+        method GET POST
+    }
+
+    handle @search {
+        reverse_proxy localhost:8080
+    }
+
+    handle_errors {
+        respond "{err.status_code} {err.status_text}"
+    }
+}
