@@ -1,0 +1,5 @@
+# 1. 清除之前错误设置的环境变量
+unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
+
+# 2. 重新运行
+python graph.py
